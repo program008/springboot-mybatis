@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：用来区别不同的类的名字 -->
+<mapper namespace="test">
+
+    <!-- 通过Id查询一个用户   -->
+    <select id="findUserById" parameterType="Integer" resultType="User">
+        select * from user where id = #{v}
+    </select>
+    <select id="findAllUser" resultType="User">
+        select * from user
+    </select>
+    <!-- 根据用户名模糊查询用户列表 -->
+    <!--    select * from user where username like '%${value}%'-->
+    <!-- select * from user where username like "%"#{value}"%"-->
+    <select id="findUserByUsername" parameterType="String" resultType="User">
+        select * from user where username like '%${value}%'
+    </select>
+    <!--  添加用户  -->
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true"
+            keyProperty="id">
+        <!--        <selectKey keyProperty="id" resultType="Integer" order="AFTER">-->
+        <!--            select LAST_INSERT_ID()-->
+        <!--        </selectKey>-->
+        insert into user (username,birthday,address,sex) values(#{username},#{birthday},#{address},#{sex})
+    </insert>
+    <!-- 更新用户 -->
+    <update id="updateUserById" parameterType="User">
+		update user
+		set username = #{username},sex = #{sex},birthday = #{birthday},address = #{address}
+		where id = #{id}
+	</update>
+    <!-- 删除用户   -->
+    <delete id="deleteUserById" parameterType="Integer">
+		delete from user
+		where id = #{id}
+	</delete>
+
+    <!--创建数据表-->
+    <update id="createtable">
+        CREATE TABLE IF NOT EXISTS `runoob22`(
+           `runoob_id` INT UNSIGNED AUTO_INCREMENT,
+           `runoob_title` VARCHAR(100) NOT NULL,
+           `runoob_author` VARCHAR(40) NOT NULL,
+           `submission_date` DATE,
+           PRIMARY KEY ( `runoob_id` )
+        )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    </update>
+    <!--删除表的字段-->
+    <!--ALTER TABLE 表名 DROP [COLUMN] 字段名 ;-->
+    <update id="altertable">
+        ALTER TABLE `runoob22` DROP COLUMN `submission_date`
+    </update>
+    <!--新增字段-->
+    <update id="addColumn">
+        ALTER TABLE `runoob22` ADD COLUMN `NAME` VARCHAR (50) NULL
+    </update>
+    <!--修改字段名称-->
+    <!--ALTER  TABLE 表名 CHANGE [column] 旧字段名 新字段名 新数据类型;-->
+    <update id="updateColumn">
+       ALTER  TABLE `runoob22` CHANGE COLUMN `NAME` `username` VARCHAR (50) NULL;
+    </update>
+    <!--修改字段的数据类型-->
+    <!--ALTER  TABLE 表名 MODIFY [COLUMN] 字段名 新数据类型 新类型长度  新默认值  新注释;-->
+    <update id="updateColumn2">
+        ALTER  TABLE `runoob22` MODIFY  COLUMN `username`  VARCHAR (50) DEFAULT NULL COMMENT '注释';
+    </update>
+    <!--修改名的名称-->
+    <!--ALTER TABLE 旧表名 RENAME TO 新表名 ;-->
+    <!--修改表的注释-->
+    <!--ALTER TABLE 表名 COMMENT '新注释'-->
+    <!--在指定位置插入新字段-->
+    <!--ALTER TABLE 表名 ADD [COLUMN] 字段名 字段类型 是否可为空 COMMENT '注释' AFTER 指定某字段 ;-->
+
+</mapper>
